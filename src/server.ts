@@ -1,11 +1,13 @@
 import express from "express";
 import { config } from "dotenv";
 import { sequelize } from "./db";
+import { router } from "../routes";
 
 config();
 const app = express();
 
 app.use(express.json());
+app.use(router);
 
 const SERVER_PORT = process.env.SERVER_PORT;
 

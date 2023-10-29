@@ -10,11 +10,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.DataTypes.INTEGER,
       },
-      firstName: {
+      first_name: {
         allowNull: false,
         type: Sequelize.DataTypes.STRING,
       },
-      lastName: {
+      last_name: {
         allowNull: false,
         type: Sequelize.DataTypes.STRING,
       },
@@ -33,6 +33,14 @@ module.exports = {
       role: {
         allowNull: false,
         type: Sequelize.DataTypes.STRING,
+      },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
       },
     });
   },

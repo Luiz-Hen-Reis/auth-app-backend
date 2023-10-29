@@ -3,6 +3,6 @@ import { authController } from "./src/controllers/authController";
 
 const router = express.Router();
 
-router.get("/auth/register", authController.register);
+router.post("/auth/register", authController.register);
 
 export { router };

@@ -18,7 +18,7 @@ export interface UserInstance
   extends Model<UserAttributes, UserCreationAttributes>,
     UserAttributes {}
 
-const User = sequelize.define<UserInstance, UserAttributes>(
+export const User = sequelize.define<UserInstance, UserAttributes>(
   "users",
   {
     id: {

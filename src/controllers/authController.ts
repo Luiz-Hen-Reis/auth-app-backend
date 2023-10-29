@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { User } from "../models/User";
+import { jwtService } from "../services/jwtService";
 
 export const authController = {
   register: async (req: Request, res: Response) => {
@@ -26,6 +27,27 @@ export const authController = {
   },
 
   login: async (req: Request, res: Response) => {
-    return res.json({ status: " ok " });
+    const { email, password } = req.body;
+
+    try {
+      const user = await User.findOne({ where: { email } });
+
+      if (!user)
+        return res.status(404).json({ failed: "User does not exist." });
+
+      const payload = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        password: user.password,
+      };
+
+      const token = jwtService.signToken(payload, "1d");
+
+      res.status(200).json({ authenticated: true, ...payload, token });
+    } catch (error) {
+      if (error instanceof Error)
+        return res.status(400).json({ message: error.message });
+    }
   },
 };

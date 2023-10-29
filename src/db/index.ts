@@ -5,4 +5,8 @@ config();
 
 const DB_CONNECTION_URL = process.env.DB_CONNECTION_URL as string;
 
-export const sequelize = new Sequelize(DB_CONNECTION_URL);
+export const sequelize = new Sequelize(DB_CONNECTION_URL, {
+  define: {
+    underscored: true,
+  },
+});

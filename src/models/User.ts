@@ -1,5 +1,6 @@
 import { DataTypes, Optional, Model } from "sequelize";
 import { sequelize } from "../db";
+import bcrypt from "bcrypt";
 
 interface UserAttributes {
   id: number;
@@ -17,35 +18,47 @@ export interface UserInstance
   extends Model<UserAttributes, UserCreationAttributes>,
     UserAttributes {}
 
-const User = sequelize.define<UserInstance, UserAttributes>("users", {
-  id: {
-    allowNull: false,
-    autoIncrement: true,
-    primaryKey: true,
-    type: DataTypes.INTEGER,
-  },
-  firstName: {
-    allowNull: false,
-    type: DataTypes.STRING,
-  },
-  lastName: {
-    allowNull: false,
-    type: DataTypes.STRING,
-  },
-  email: {
-    allowNull: false,
-    type: DataTypes.STRING,
-    unique: true,
-    validate: {
-      isEmail: true,
+const User = sequelize.define<UserInstance, UserAttributes>(
+  "users",
+  {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+    },
+    firstName: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    lastName: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    email: {
+      allowNull: false,
+      type: DataTypes.STRING,
+      unique: true,
+      validate: {
+        isEmail: true,
+      },
+    },
+    password: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    role: {
+      allowNull: false,
+      type: DataTypes.STRING,
     },
   },
-  password: {
-    allowNull: false,
-    type: DataTypes.STRING,
-  },
-  role: {
-    allowNull: false,
-    type: DataTypes.STRING,
-  },
-});
+  {
+    hooks: {
+      beforeSave: async (user) => {
+        if (user.isNewRecord || user.changed("password")) {
+          user.password = await bcrypt.hash(user.password, 10);
+        }
+      },
+    },
+  }
+);
